@@ -6,8 +6,8 @@
 
 using namespace std;
 mt19937_64 gen(random_device{}());
-uniform_int_distribution<> intDistr(1, 100000);
-void genAAn(vector<unsigned long long>& local_v);
+uniform_int_distribution<long long> intDistr;
+void genAAn(vector<long long>& local_v);
 void CLI();
 bool bCLI = true;
 unsigned long long y;
@@ -35,16 +35,29 @@ int main() {
 	}
 #endif // 0
 	vector<thread> threads;
-	vector<unsigned long long> v;
+	vector<long long> v;
 
 	cout << "How many numbers do you want to generate?" << endl;
 	cin >> y;
-	cout << "In what range? (Ex: 1-10000)" << endl;
+	cout << "Give an interval. (Ex: -10000:10000)" << endl;
+	string in;
+	cin >> in;
+	const size_t dP = in.find(':');
+
+	long long in1 = stoll(in.substr(0, dP));
+	long long in2 = stoll(in.substr(dP+1));
+
+	const uniform_int_distribution<long long> intDistr2(in1, in2);
+	intDistr = intDistr2;
+
+	cout << "How many threads do you want to use?" << endl;
+	int th;
+	cin >> th;
 
 	auto start = chrono::steady_clock::now();
-	z = y/2;
+	z = y/th;
 	unsigned long long x = y / z;
-	vector<vector<unsigned long long>> results(x);
+	vector<vector<long long>> results(x);
 	for (unsigned long long i = 0; i < x; i++) {
 		threads.push_back(thread(genAAn, ref(results[i])));
 		cout << "New generator thread initialized.\n";
@@ -53,7 +66,7 @@ int main() {
 	for (thread &t : threads) {
 		t.join();
 	}
-	if (y % 2 != 0) {
+	for (size_t i = 0; i < y % th; i++) {
 		results[0].push_back(intDistr(gen));
 	}
 	for (const auto& local_v : results) {
@@ -67,7 +80,7 @@ int main() {
 	cout << "Do you want to see all generated numbers? [Y/N] ";
 	char c;
 	cin >> c;
-	if (c == 'Y') {
+	if (c == 'Y' || c == 'y') {
 		for (size_t i = 0; i < v.size(); i++) {
 			cout << "Number " << i + 1 << ": " << v[i] << endl;
 		}
@@ -75,7 +88,7 @@ int main() {
 	return 0;
 } 
 
-void genAAn(vector<unsigned long long>& local_v) {
+void genAAn(vector<long long>& local_v) {
 	for (size_t i = 0; i < z; i++)
 	{
 		//lock_guard<mutex> lock(mtx);
