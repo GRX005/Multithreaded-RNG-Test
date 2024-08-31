@@ -1,9 +1,8 @@
 ﻿#include <iostream>
-#include <vector>
 #include <random>
 #include <thread>
 #include <chrono>
-#include <cstdlib>
+#include <Windows.h>
 
 using namespace std;
 thread_local mt19937_64 gen(random_device{}());
@@ -102,7 +101,12 @@ void CLI() {
 	const string c = ".";
 	const string a = string(13, ' ') + "\r";
 	int i = 0;
-	cout << "\033[?25l";
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO ci;
+	GetConsoleCursorInfo(h, &ci);
+	ci.bVisible = 0;
+	SetConsoleCursorInfo(h, &ci);
+
 	while (bCLI)
 	{
 		switch (i)
@@ -129,5 +133,7 @@ void CLI() {
 		cout << "\r";
 		this_thread::sleep_for(chrono::milliseconds(500));
 	}
-	cout << a+"\033[?25h";
+	cout << a;
+	ci.bVisible = 1;
+	SetConsoleCursorInfo(h, &ci);
 }
