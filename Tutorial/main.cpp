@@ -2,8 +2,10 @@
 #include <random>
 #include <thread>
 #include <chrono>
-#include <Windows.h>
+#include <string>
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 using namespace std;
 thread_local mt19937_64 gen(random_device{}());
 void genAAn(vector<long long>& local_v, uniform_int_distribution<long long> intDistr3);
@@ -13,26 +15,6 @@ unsigned long long y;
 unsigned long long z;
 
 int main() {
-#if 0
-	int a[5];
-	a[0] = 1;
-	a[1] = 23;
-	cout << a[0] + a[1] << endl;
-	setlocale(LC_ALL, "hun");
-	string őű = "asdáéőúűöüó";
-	cout << őű;
-#endif // 0
-#if 0
-	int a[5];
-	for (int i = 0; i < 5; i++) {
-		cout << "Add meg az " << i + 1 << ". számot!" << endl;
-		cin >> a[i];
-	}
-	cout << endl;
-	for (int i = 0; i < 5; i++) {
-		cout << i + 1 << ". elem: " << a[i] << endl;
-	}
-#endif // 0
 	vector<thread> threads;
 	vector<long long> v;
 
@@ -73,7 +55,7 @@ int main() {
 	bCLI = false;
 	cliThread.join();
 	auto end = chrono::steady_clock::now();
-	cout << "Time passed: " << chrono::duration_cast<chrono::milliseconds>(end - start) << endl;
+	cout << "Time passed: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << endl;
 	cout << "Vector size: " << v.size() << endl;
 	cout << "Do you want to see all generated numbers? [Y/N] ";
 	char c;
