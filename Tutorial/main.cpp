@@ -20,7 +20,7 @@ int main() {
 
 	cout << "How many numbers do you want to generate?" << endl;
 	cin >> y;
-	cout << "Give an interval. (Ex: -10000:10000)" << endl;
+	cout << "Give an interval. (Example: -10000:10000)" << endl;
 	string in;
 	cin >> in;
 	const size_t dP = in.find(':');
