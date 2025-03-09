@@ -1,1 +1,1 @@
-# Tutorial soma szarja 2
+# Tutorial soma szarja 20
