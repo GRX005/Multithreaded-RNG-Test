@@ -1,1 +1,1 @@
-# Tutorial soma szarja 200000qfwrtget
+C++ multithreaded random number generator.
